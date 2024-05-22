@@ -1,14 +1,85 @@
 <?php
-
 include './partials/_dbconnect.php';
 
-if($_SERVER['REQUEST_METHOD'] == "POST"){
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+$errorMsg = false;
+$signupError = "";
 
-    echo $email + $password;
+if (isset($_POST['signin'])) {
 
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        $sql = "SELECT * FROM USER WHERE email='$email'";
+        $result = mysqli_query($conn, $sql);
+        $numRows = mysqli_num_rows($result);
+
+
+        if ($numRows == 1) {
+            $row = mysqli_fetch_assoc($result);
+            if ($password == $row['password']) {
+                header("Location: ./index.php");
+            } else {
+                $errorMsg = true;
+            }
+        }
+    }
 }
+if (isset($_POST['signup'])) {
+
+    // Function to validate email
+    function validateEmail($email)
+    {
+        // Email validation regex pattern
+        $emailPattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+        return preg_match($emailPattern, $email);
+    }
+
+    // Function to validate password
+    function validatePassword($password)
+    {
+        // Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character
+        $passwordPattern = '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/';
+        return preg_match($passwordPattern, $password);
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        $username = $_POST['username'];
+        $userEmail = $_POST['userEmail'];
+        $userPassword = $_POST['userPassword'];
+
+        $isEmailValid = validateEmail($userEmail);
+        $isPasswordValid = validatePassword($userPassword);
+
+        if ($isEmailValid && $isPasswordValid) {
+            echo "Hello";
+            try{
+                $sql = "INSERT INTO `user` (`username`, `email`, `password`) VALUES ('$userEmail', '$userEmail', '$userPassword');
+                ";
+            $result = mysqli_query($conn, $sql);
+
+            if($result){
+                echo "Successfully added data";
+            }else{
+                echo "unable to added data";
+            }
+            }catch(mysqli_sql_exception $e){
+                echo $e;
+            }
+
+            
+        } else {
+            if (!$isEmailValid) {
+                echo "Hello from valid";
+            }
+            if (!$isPasswordValid) {
+                echo "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character.<br>";
+            }
+        }
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -26,33 +97,26 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     </h2>
     <div class="container" id="container">
         <div class="form-container sign-up-container">
-            <form action="#">
+            <form method="post">
                 <h1>Create Account</h1>
-                <!-- <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                <span>or use your email for registration</span> -->
-                <input type="text" placeholder="Name" />
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
-                <button>Sign Up</button>
+                <input type="text" placeholder="Username" name="username" id="username" />
+                <input type="email" placeholder="Email" name="userEmail" />
+                <input type="password" placeholder="Password" name="userPassword" />
+                <input type="submit" name="signup" id="signup" value="Sign Up" />
             </form>
         </div>
         <div class="form-container sign-in-container">
-            <form action="./login.php" method="post">
+            <form method="post">
                 <h1>Sign in</h1>
-                <!-- <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                <span>or use your account</span> -->
-                <input type="email" name="email" placeholder="Email" />
-                <input type="password" name="password" placeholder="Password" />
+                <input type="email" id="email" name="email" placeholder="Email" />
+                <input type="password" id="password" name="password" placeholder="Password" />
+                <?php
+                if ($errorMsg) {
+                    echo "<span>Invalid Credentials</span>";
+                }
+                ?>
                 <a href="#">Forgot your password?</a>
-                <button>Sign In</button>
+                <input type="submit" name="signin" id="signin" value="Sign In" />
             </form>
         </div>
         <div class="overlay-container">
@@ -65,6 +129,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 <div class="overlay-panel overlay-right">
                     <h1>Hello, Explorer!</h1>
                     <p>Enter your personal details and start journey with us</p>
+
                     <button class="ghost" id="signUp">Sign Up</button>
                 </div>
             </div>
