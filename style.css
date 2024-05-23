@@ -133,6 +133,7 @@ TABLE OF CONTENT
 
 html {
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 *,
@@ -477,6 +478,7 @@ input[name="toggle"] {
   visibility: hidden;
 }
 
+
 #ui-section-header--menu-id:checked ~ .ui-section-header--nav {
   opacity: 1;
   top: 0;
@@ -628,38 +630,6 @@ input[name="toggle"] {
 .ui-component-card--pricing-amount {
   font-size: var(--ui-typography-h1);
   font-weight: 700;
-}
-
-/* AMOUNT */
-
-.ui-component-card--pricing-amount-1::before {
-  content: "$5";
-}
-
-#ui-component-toggle__yearly:checked
-  ~ div
-  .ui-component-card--pricing-amount-1::before {
-  content: "$3";
-}
-
-.ui-component-card--pricing-amount-2::before {
-  content: "$15";
-}
-
-#ui-component-toggle__yearly:checked
-  ~ div
-  .ui-component-card--pricing-amount-2::before {
-  content: "$13";
-}
-
-.ui-component-card--pricing-amount-3::before {
-  content: "$25";
-}
-
-#ui-component-toggle__yearly:checked
-  ~ div
-  .ui-component-card--pricing-amount-3::before {
-  content: "$23";
 }
 
 /* LIST */

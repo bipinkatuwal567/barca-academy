@@ -1,8 +1,17 @@
 <?php
+session_start();
+
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+    header('Location: /barca-academy/index.php');
+}
+
 include './partials/_dbconnect.php';
 
 $errorMsg = false;
-$signupError = "";
+$signupSuccess = false;
+$emailError = false;
+$passwordError = false;
+$existEmail = false;
 
 if (isset($_POST['signin'])) {
 
@@ -18,7 +27,9 @@ if (isset($_POST['signin'])) {
         if ($numRows == 1) {
             $row = mysqli_fetch_assoc($result);
             if ($password == $row['password']) {
-                header("Location: ./index.php");
+                $_SESSION['loggedin'] = true;
+                $_SESSION['userEmail'] = $email;
+                header("Location: /barca-academy/index.php");
             } else {
                 $errorMsg = true;
             }
@@ -48,32 +59,36 @@ if (isset($_POST['signup'])) {
         $userEmail = $_POST['userEmail'];
         $userPassword = $_POST['userPassword'];
 
-        $isEmailValid = validateEmail($userEmail);
-        $isPasswordValid = validatePassword($userPassword);
-
-        if ($isEmailValid && $isPasswordValid) {
-            echo "Hello";
-            try{
-                $sql = "INSERT INTO `user` (`username`, `email`, `password`) VALUES ('$userEmail', '$userEmail', '$userPassword');
-                ";
-            $result = mysqli_query($conn, $sql);
-
-            if($result){
-                echo "Successfully added data";
-            }else{
-                echo "unable to added data";
-            }
-            }catch(mysqli_sql_exception $e){
-                echo $e;
-            }
-
-            
+        $existSql = "select * from user where email = '$userEmail'";
+        $result = mysqli_query($conn, $existSql);
+        $numRows = mysqli_num_rows($result);
+        if ($numRows > 0) {
+            $existEmail = true;
         } else {
-            if (!$isEmailValid) {
-                echo "Hello from valid";
-            }
-            if (!$isPasswordValid) {
-                echo "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character.<br>";
+            $isEmailValid = validateEmail($userEmail);
+            $isPasswordValid = validatePassword($userPassword);
+
+            if ($isEmailValid && $isPasswordValid) {
+                try {
+                    $sql = "INSERT INTO `user` (`username`, `email`, `password`) VALUES ('$userEmail', '$userEmail', '$userPassword');
+                ";
+                    $result = mysqli_query($conn, $sql);
+
+                    if ($result) {
+                        $signupSuccess = true;
+                    } else {
+                        $signupSuccess = false;
+                    }
+                } catch (mysqli_sql_exception $e) {
+                    echo $e;
+                }
+            } else {
+                // if (!$isEmailValid) {
+                //     echo "Hello from valid";
+                // }
+                // if (!$isPasswordValid) {
+                //     echo "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character.<br>";
+                // }
             }
         }
     }
@@ -134,6 +149,11 @@ if (isset($_POST['signup'])) {
                 </div>
             </div>
         </div>
+
+        <div id="toasts">
+            <!--   <div class="toast">Ola!</div>
+  <div class="toast">Que pasa?</div> -->
+        </div>
     </div>
 
     <script>
@@ -148,6 +168,30 @@ if (isset($_POST['signup'])) {
         signInButton.addEventListener("click", () => {
             container.classList.remove("right-panel-active");
         });
+
+        // Toast
+        const toasts = document.getElementById('toasts');
+
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.classList.add('toast');
+
+            notif.innerText = message;
+            toasts.appendChild(notif);
+
+            setTimeout(() => {
+                notif.remove()
+            }, 3000)
+
+        }
+        const checkNotification = <?php echo json_encode($signupSuccess); ?>;
+        if (checkNotification) {
+            showNotification("You've successfully created an account!");
+        }
+
+        if (<?php echo json_encode($existEmail); ?>) {
+            showNotification("Email already exist!");
+        }
     </script>
 </body>
 

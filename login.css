@@ -245,3 +245,23 @@ input {
   height: 40px;
   width: 40px;
 }
+
+
+/* Toast */
+#toasts{
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+  display:flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 9999;
+}
+
+.toast{
+  background-color:#dddddd;
+  border-radius: 5px;
+  padding: 1em 2em;
+  margin: 0.5em;
+  box-shadow: 4px 4px 0;
+}
