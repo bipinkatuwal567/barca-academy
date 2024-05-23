@@ -1,8 +1,69 @@
 <?php
+
+include "./partials/_dbconnect.php";
 session_start();
+
+$email = "";
+$userId;
 
 if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
     header("Location: /barca-academy/login.php");
+}
+
+if (isset($_SESSION['userEmail'])) {
+    $email = $_SESSION['userEmail'];
+}
+
+
+$sql = "SELECT * FROM user WHERE email='$email'";
+$result = mysqli_query($conn, $sql);
+$numRows = mysqli_num_rows($result);
+
+if ($numRows == 1) {
+    $row = mysqli_fetch_assoc($result);
+    $userId = $row['user_id'];
+}
+
+$plan = "";
+$price = "";
+$subscription = false;
+$subscription = false;
+$checkSubscribed = false;
+
+if (isset($_POST['basic'])) {
+    $plan = "Basic";
+    $price = (int)$_POST['basic'];
+    $_SESSION['price'] = $price;
+}
+
+if (isset($_POST['standard'])) {
+    $plan = "Standard";
+    $price = (int)$_POST['standard'];
+    $_SESSION['price'] = $price;
+}
+if (isset($_POST['special'])) {
+    $plan = "Special";
+    $price = (int)$_POST['special'];
+    $_SESSION['price'] = $price;
+}
+
+$sql = "SELECT * FROM user WHERE user_id='$userId'";
+    $result = mysqli_query($conn, $sql);
+    $numRows = mysqli_num_rows($result);
+
+    if ($numRows == 1) {
+        $checkSubscribed = true;
+    }
+
+if (isset($_POST['cardHolder'])) {
+        $cardholderName = $_POST['cardHolder'];
+        $price = $_SESSION['price'];
+        $sql = "INSERT INTO `subscription` (`cardholder_name`, `price`, `userId`) VALUES ('$cardholderName', '$price', '$userId')";
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            $subscription = true;
+        }
 }
 
 ?>
@@ -19,10 +80,12 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
 
 <body>
     <div class="screen flex-center">
-        <form class="popup flex p-lg">
-            <div class="close-btn pointer flex-center p-sm">
-                <i class="ai-cross"></i>
-            </div>
+        <?php
+        if ($checkSubscribed) {
+            echo "<h2>User has already subscribed</h2>";
+        }
+        ?>
+        <form class="popup flex p-lg" action="/barca-academy/pricing.php" method="post">
 
             <!-- CARD FORM -->
             <div class="flex-fill flex-vertical">
@@ -42,7 +105,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
                             <strong>Card Number</strong>
                             <span>Enter 16-digit card number on the card</span>
                         </div>
-                        <div class="f-main-color pointer"><i class="ai-pencil"></i> Edit</div>
+                        <div class="f-main-color pointer"><?php echo $plan . " plan: " . "Rs." . $price; ?></div>
                     </div>
 
                     <!-- Card Field -->
@@ -115,7 +178,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
                         </div>
                         <div class="card-property-value">
                             <div class="input-container">
-                                <input id="name" data-bound="name_mock" data-def="Mr. Cardholder" type="text" class="uppercase" placeholder="CARDHOLDER NAME">
+                                <input id="name" name="cardHolder" data-bound="name_mock" data-def="Mr. Cardholder" type="text" class="uppercase" placeholder="CARDHOLDER NAME">
                                 <i class="ai-person"></i>
                             </div>
                         </div>
@@ -124,7 +187,21 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
 
                 </div>
                 <div class="action flex-center">
-                    <button type="submit" class="b-main-color pointer">Pay Now</button>
+                    <button type="submit" disabled="<?php if ($checkSubscribed) {
+                                                        echo "true";
+                                                    } ?>" class="b-main-color pointer">
+                        <?php
+                        if ($checkSubscribed) {
+                            echo "Already Subscribed";
+                        } else {
+                            if ($subscription) {
+                                echo "Subscription added";
+                            } else {
+                                echo "Pay Now";
+                            }
+                        }
+                        ?>
+                    </button>
                 </div>
             </div>
 

@@ -1,6 +1,6 @@
 :root {
     --field-border: 1px solid #EEEEEE;
-    --accent-color: #2962FF;
+    --accent-color: #1a1a1a;
     --sidebar-color: #F1F1F1;
     --secondary-text: #aaaaaa;
     --radius-sm: .25em;
@@ -16,6 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
   }
   .flex-fill {
     display: flex;
@@ -50,7 +51,7 @@
   .uppercase{ text-transform: uppercase; }
   .ellipsis { text-overflow: ellipsis; overflow: hidden; }
   
-  .f-main-color { color: #2962FF; }
+  .f-main-color { color: #1a1a1a; }
   .f-secondary-color { color: var(--secondary-text); }
   .b-main-color { background: var(--accent-color); }
   .numbers::-webkit-outer-spin-button,
@@ -72,16 +73,19 @@
     bottom: 0;
     right: 0;
     top: 0;
-    background: #E3F2FD;
+    /* flex-direction: column; */
+    /* background: #E3F2FD; */
   }
   
   .popup {
     position: relative;
-    width: 50em;
+    width: 40em;
     height: 35em;
     background: #FFFFFF;
     overflow-x: hidden;
     overflow-y: auto;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
   }
   .popup .close-btn {
     position: absolute;
@@ -183,7 +187,11 @@
     transition: background-color .2s ease-in-out;
   }
   .action button:hover {
-    background: #2979FF;
+    background: #353535;
+  }
+
+  button:disabled{
+    cursor: not-allowed;
   }
   
   .input-container {
@@ -286,7 +294,7 @@
     background: #2962ff36;
     border-bottom-left-radius: 0.2em;
     border-bottom-right-radius: 0.2em;
-    box-shadow: 0 2px 15px 5px #2962ff4d;
+    box-shadow: 0 2px 15px 5px #353535;
   }
   
   .purchase-props {

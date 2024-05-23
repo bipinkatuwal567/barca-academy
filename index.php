@@ -33,8 +33,9 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
         <label for="ui-section-header--menu-id" class="ui-section-header--menu-icon"></label>
         <!-- MENU -->
         <nav role="navigation" class="ui-section-header--nav ui-layout-flex">
-          <a href="#" role="link" aria-label="#" class="ui-section-header--nav-link">Features</a>
-          <a href="#pricing" role="link" aria-label="#" class="ui-section-header--nav-link">Pricing</a>
+          <a href="#coach" role="link" aria-label="#" class="ui-section-header--nav-link">Coach</a>
+          <a href="#faq" role="link" aria-label="#" class="ui-section-header--nav-link">Faq</a>
+          <a href="/barca-academy/contact.php" role="link" aria-label="#" class="ui-section-header--nav-link">Contact us</a>
           <a href="/barca-academy/partials/logout.php" role="link" aria-label="#" class="ui-section-header--nav-link logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
         </nav>
       </div>
@@ -50,7 +51,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
             <p class="ui-text-intro">Come and experience the Barca way of football, where every session is a step towards achieving your dreams. At Barca Academy, we don't just train players; we create champions.</p>
             <!-- CTA -->
             <div class="ui-component-cta ui-layout-flex">
-              <a href="#" role="link" aria-label="#" class="ui-component-button ui-component-button-normal ui-component-button-primary">Get Started</a>
+              <a href="#pricing" role="link" aria-label="#" class="ui-component-button ui-component-button-normal ui-component-button-primary">Get Started</a>
             </div>
           </div>
           <!-- IMAGE -->
@@ -69,7 +70,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
         </div>
       </div>
     </section>
-    <section class="ui-section-feature">
+    <section class="ui-section-feature" id="coach">
       <div class="ui-layout-container">
         <div class="ui-section-feature__layout ui-layout-grid ui-layout-grid-3">
           <div class="ui-component-card ui-component-card--feature">
@@ -133,7 +134,10 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
               <li class="ui-component-list--item ui-component-list--item-check">Basic skills and fitness drills.</li>
             </ul>
             <!-- CTA -->
-            <a href="/barca-academy/pricing.php?price=1000" class="ui-component-button ui-component-button-big ui-component-button-secondary" role="link" aria-label="#">Buy Now</a>
+            <form action="/barca-academy/pricing.php" method="post">
+              <input type="hidden" name="basic" value="1000">
+              <button class="ui-component-button ui-component-button-big ui-component-button-secondary" role="link" aria-label="#">Buy Now</button>
+            </form>
           </div>
           <div class="ui-component-card ui-component-card--pricing">
             <span><strong>Standard</strong></span>
@@ -151,7 +155,10 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
               <li class="ui-component-list--item ui-component-list--item-check">Nutritional guidance.</li>
             </ul>
             <!-- CTA -->
-            <a href="#" class="ui-component-button ui-component-button-big ui-component-button-primary" role="link" aria-label="#">Buy Now</a>
+            <form action="/barca-academy/pricing.php" method="post">
+              <input type="hidden" name="standard" value="1800">
+              <button class="ui-component-button ui-component-button-big ui-component-button-primary" role="link" aria-label="#">Buy Now</button>
+            </form>
           </div>
           <div class="ui-component-card ui-component-card--pricing">
             <span><strong>Special</strong></span>
@@ -169,12 +176,15 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
               <li class="ui-component-list--item ui-component-list--item-check">Exclusive merchandise and events.</li>
             </ul>
             <!-- CTA -->
-            <a href="#" class="ui-component-button ui-component-button-big ui-component-button-secondary" role="link" aria-label="#">Buy Now</a>
+            <form action="/barca-academy/pricing.php" method="post">
+              <input type="hidden" name="special" value="3200">
+              <button class="ui-component-button ui-component-button-big ui-component-button-secondary" role="link" aria-label="#">Buy Now</button>
+            </form>
           </div>
         </div>
       </div>
     </section>
-    <section class="ui-section-faq">
+    <section class="ui-section-faq" id="faq">
       <div class="ui-layout-container">
         <div class="ui-section-faq__layout ui-layout-grid ui-layout-grid-2">
           <div>
@@ -194,7 +204,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
             <p class="ui-section-faq--answer">Our coaches are experienced professionals with a deep understanding of football. They are dedicated to nurturing talent and promoting a positive, encouraging training environment.</p>
           </div>
         </div>
-        <p class="ui-section-faq--note">Still have questions? <a href="#" role="link" aria-label="#">Contact us</a>.</p>
+        <p class="ui-section-faq--note">Still have questions? <a href="/barca-academy/contact.php" role="link" aria-label="#">Contact us</a>.</p>
       </div>
     </section>
     <section class="ui-section-close">
@@ -206,7 +216,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
           </div>
           <!-- CTA -->
           <div class="ui-component-cta ui-layout-flex">
-            <a href="#" role="link" aria-label="#" class="ui-component-button ui-component-button-normal ui-component-button-primary">Get Started</a>
+            <a href="#pricing" role="link" aria-label="#" class="ui-component-button ui-component-button-normal ui-component-button-primary">Get Started</a>
           </div>
         </div>
       </div>
